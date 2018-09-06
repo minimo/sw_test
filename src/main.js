@@ -27,11 +27,10 @@ phina.define("MainScene", {
 
     const shape = RectangleShape()
       .addChildTo(this)
-      .setPosition(100, 100);
+      .setPosition(300, 500);
 
     shape.tweener.clear()
       .to({scaleX: 3, scaleY: 3}, 1000, "easeOutQuad")
-      .wait(500)
       .to({scaleX: 1, scaleY: 1}, 1000, "easeOutBounce")
       .setLoop(true);
   },

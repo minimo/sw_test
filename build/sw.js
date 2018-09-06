@@ -1,5 +1,6 @@
 // キャッシュにバージョンを付けておくと、古いキャッシュを消す時に便利
-var CACHE_STATIC_VERSION = 'static-v1';
+var CACHE_STATIC_VERSION = 'static-v2';
+var CACHE_DYNAMIC_VERSION = null;
 
 // サービスワーカーのインストール
 self.addEventListener('install', event => {
@@ -54,7 +55,7 @@ self.addEventListener('activate', event => {
     caches.keys()
       .then(function(keyList) {
         return Promise.all(keyList.map(key => {
-          if (key !== CACHE_STATIC_VERSION && key !== CACHE_DYNAMIC_VERSION) {
+          if (key !== CACHE_STATIC_VERSION) {
             console.log('[Service Worker] Removing old cache...');
             return caches.delete(key);
           }
