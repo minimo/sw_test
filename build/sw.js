@@ -1,5 +1,5 @@
 // キャッシュにバージョンを付けておくと、古いキャッシュを消す時に便利
-var CACHE_STATIC_VERSION = 'static-v2';
+var CACHE_STATIC_VERSION = 'static-v3';
 var CACHE_DYNAMIC_VERSION = null;
 
 // サービスワーカーのインストール
@@ -17,51 +17,38 @@ self.addEventListener('install', event => {
           'style.css',
           'phina_app.js',
           'phina.js',
+          'assets/background.png',
+          'assets/buropiyo.png',
+          'assets/character.tmss',
+          'assets/damage.mp3',
+          'assets/ground.png',
+          'assets/meropiyo.png',
+          'assets/mikapiyo.png',
+          'assets/nasupiyo.png',
+          'assets/takepiyo.png',
+          'assets/tomapiyo.png',
+          'assets/tube1.png',
+          'assets/tube2.png',
         ]);
       })
   );
 });
 
 self.addEventListener('fetch', event => {
-  console.log('[Service Worker] Fetching something ...', event);
+  console.log('[Service Worker] Fetching something ...', event.request.url);
   event.respondWith(
-    // キャッシュの存在チェック
     caches.match(event.request)
       .then(response => {
+        // キャッシュがあったのでそのレスポンスを返す
         if (response) {
           return response;
-        } else {
-          // キャッシュがなければリクエストを投げて、レスポンスをキャッシュに入れる
-          return fetch(event.request)
-            .then(res => {
-              return caches.open(CACHE_DYNAMIC_VERSION)
-                .then(cache => {
-                  // 最後に res を返せるように、ここでは clone() する必要がある
-                  cache.put(event.request.url, res.clone());
-                  return res;
-                })
-            })
-            .catch(function() {
-              // エラーが発生しても何もしない
-            });
         }
-      })
+        return fetch(event.request);
+      }
+    )
   );
 });
 
-self.addEventListener('activate', event => {
-  console.log('[Service Worker] Activating Service Worker...');
-  event.waitUntil(
-    caches.keys()
-      .then(function(keyList) {
-        return Promise.all(keyList.map(key => {
-          if (key !== CACHE_STATIC_VERSION) {
-            console.log('[Service Worker] Removing old cache...');
-            return caches.delete(key);
-          }
-        }));
-      })
-  );
-  return self.clients.claim();
+self.addEventListener('activate', event　=> {
+  clients.claim();
 });
-
