@@ -23,7 +23,7 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  console.log('[Service Worker] Fetching something ...');
+  console.log('[Service Worker] Fetching something ...', event);
   event.respondWith(
     // キャッシュの存在チェック
     caches.match(event.request)
