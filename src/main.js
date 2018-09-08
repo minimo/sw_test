@@ -386,7 +386,7 @@ phina.main(function() {
     startLabel: 'main',
   });
 
-  app.enableStats();
+  // app.enableStats();
 
   app.run();
   
