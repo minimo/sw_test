@@ -56,6 +56,10 @@ if (workbox) {
     })
   );
 
+  self.addEventListener('install', e => {
+    self.skipWaiting();
+  });
+  
 } else {
   console.log("Workbox didn't load");
 }
